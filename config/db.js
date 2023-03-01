@@ -1,27 +1,12 @@
+const mongoose = require('mongoose');
 
-const { MongoClient } = require('mongodb');
-
-// Database Connection
-
-const state = {
-    db: null
-
+const connectDB = async () => {
+    try {
+        const connect = await mongoose.connect(process.env.MONGO_URL)
+        console.log(`database connected`);
+    } catch (error) {
+        throw error
+    }
 }
 
-module.exports.connect = function (done) {
-    const url = process.env.MONGO_URL
-    const dbname = 'travel'
-
-    MongoClient.connect(url, (err, data) => {
-        if (err) return done(err)
-        state.db = data.db(dbname)
-        done()
-    })
-
-}
-
-module.exports.get = function () {
-    return state.db
-
-}
-
+module.exports = connectDB

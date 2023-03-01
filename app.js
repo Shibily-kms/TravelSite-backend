@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express()
 const dotenv = require('dotenv').config()
 const port = process.env.PORT || 5000;
-const db = require('./config/db')
+const connectDB = require('./config/db')
 
 
 const { errorHandler } = require('./middleware/error-middleware')
@@ -14,10 +14,7 @@ const { errorHandler } = require('./middleware/error-middleware')
 const userRouter = require('./routes/user')
 const adminRouter = require('./routes/admin')
 
-db.connect((err) => {
-    if (err) console.log("Connection Error");
-    else console.log('Database connected')
-})
+connectDB()
 
 app.use(cors())
 
