@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
-router.get('/', (req, res) => {
-    res.send('admin')
+const { postLogin } = require('../controller/admin-controller')
+
+
+// Auth
+router.post('/login', postLogin)
+router.get('/login', (req,res)=>{
+    res.status(200).json('hi')
 })
 
 module.exports = router;
