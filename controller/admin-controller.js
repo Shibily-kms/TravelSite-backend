@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const HolidayModel = require('../models/holiday')
+const PopularModel = require('../models/popular')
 
+// Login
 const postLogin = (req, res) => {
     try {
         let { email, password } = req.body
@@ -26,6 +28,7 @@ const postLogin = (req, res) => {
     }
 }
 
+// Holiday
 const postHolidayImage = (req, res) => {
     try {
         res.status(200).json({ status: true, message: 'Success' });
@@ -74,8 +77,64 @@ const deleteHoliday = (req, res) => {
     }
 }
 
+// Video0
 const postVideo = (req, res) => {
     console.log('video complted');
 }
 
-module.exports = { postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday, postVideo }
+// Popular
+
+
+const postPopularImage = (req, res) => {
+    try {
+        res.status(200).json({ status: true, message: 'Success' });
+    } catch (error) {
+        throw error;
+    }
+}
+
+const postPopular = (req, res) => {
+    try {
+        let body = req.body
+        console.log(body);
+        PopularModel.create(body).then((response) => {
+            if (response) {
+                res.status(201).json({ status: true, data: response, message: 'New item added' })
+            }
+        }).catch((error) => {
+            res.status(400).json({ status: false, message: 'Not added' })
+        })
+    } catch (error) {
+
+    }
+}
+
+const getPopular = (req, res) => {
+    try {
+        console.log('hihihihi');
+        PopularModel.find().then((result) => {
+            res.status(201).json({ status: true, data: result })
+        })
+    } catch (error) {
+        res.status(400).json({ status: false, message: "can not find items" })
+    }
+}
+
+const deletePopular = (req, res) => {
+    const id = req.params.id
+    console.log(id, 'id')
+    try {
+        PopularModel.findByIdAndDelete(id).then((respones) => {
+            console.log(respones, 'sdfsd')
+            res.status(200).json({ status: true, message: "deleted" })
+        })
+    } catch (error) {
+
+    }
+}
+
+
+module.exports = {
+    postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday, postVideo,
+    postPopularImage, postPopular, getPopular, deletePopular,
+}

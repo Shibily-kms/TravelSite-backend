@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday, postVideo } = require('../controller/admin-controller')
+const { postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday, postVideo,
+    postPopularImage, postPopular, getPopular, deletePopular, } = require('../controller/admin-controller')
 const store = require('../config/multer');
 const uploadVideo = require('../config/multer-video');
 
@@ -17,6 +18,11 @@ router.post('/perfect-holiday/image', store.single('file'), postHolidayImage)
 // Video
 router.post('/video', uploadVideo.single('video'), postVideo)
 
+// Popular
+router.post('/popular-flight', postPopular)
+router.get('/popular-flight', getPopular)
+router.delete('/popular-flight/:id', deletePopular)
+router.post('/popular-flight/image', store.single('file'), postPopularImage)
 
 
 router.get('/login', (req, res) => {
