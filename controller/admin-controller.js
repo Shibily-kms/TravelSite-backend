@@ -63,10 +63,10 @@ const getHoliday = (req, res) => {
 
 const deleteHoliday = (req, res) => {
     const id = req.params.id
-    console.log(id,'id')
+    console.log(id, 'id')
     try {
         HolidayModel.findByIdAndDelete(id).then((respones) => {
-            console.log(respones,'sdfsd')
+            console.log(respones, 'sdfsd')
             res.status(200).json({ status: true, message: "deleted" })
         })
     } catch (error) {
@@ -74,4 +74,8 @@ const deleteHoliday = (req, res) => {
     }
 }
 
-module.exports = { postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday }
+const postVideo = (req, res) => {
+    console.log('video complted');
+}
+
+module.exports = { postLogin, postHolidayImage, postHoliday, getHoliday, deleteHoliday, postVideo }
