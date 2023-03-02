@@ -25,6 +25,34 @@ const doSignUp = async (req, res) => {
     }
 }
 
+const doLogin = async (req, res) => {
+    try {
+        let body = req.body
+        const user = await UserModel.findOne({ email: body.email })
+        if (user) {
+            let status = await bcrypt.compare(body.password, user.password);
+            if (status) {
+                delete user._doc.password
+                const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, { expiresIn: 1000 * 60 * 60 * 24 * 100 })
+                res.status(201).json({ status: true, user, token })
+            } else {
+                res.status(400).json({ status: false, message: 'Incorrect Password' })
+            }
+        } else {
+            res.status(400).json({ status: false, message: 'Invalid EmailId' })
+        }
+    } catch (error) {
+
+    }
+}
+
+const getUser = async (req, res) => {
+    UserModel.findById({ _id: req.user.Id }).then((user) => {
+        delete user._doc.password
+        res.status(201).json({ status: true, user })
+    })
+}
+
 
 const getHoliday = (req, res) => {
     try {
@@ -46,4 +74,4 @@ const getPopular = (req, res) => {
 }
 
 
-module.exports = { getHoliday, getPopular, doSignUp }
+module.exports = { getHoliday, getPopular, doSignUp, doLogin, getUser }
