@@ -40,7 +40,6 @@ const postHolidayImage = (req, res) => {
 const postHoliday = (req, res) => {
     try {
         let body = req.body
-        console.log(body);
         HolidayModel.create(body).then((response) => {
             if (response) {
                 res.status(201).json({ status: true, data: response, message: 'New item added' })
@@ -55,7 +54,6 @@ const postHoliday = (req, res) => {
 
 const getHoliday = (req, res) => {
     try {
-        console.log('hihihihi');
         HolidayModel.find().then((result) => {
             res.status(201).json({ status: true, data: result })
         })
@@ -66,10 +64,8 @@ const getHoliday = (req, res) => {
 
 const deleteHoliday = (req, res) => {
     const id = req.params.id
-    console.log(id, 'id')
     try {
         HolidayModel.findByIdAndDelete(id).then((respones) => {
-            console.log(respones, 'sdfsd')
             res.status(200).json({ status: true, message: "deleted" })
         })
     } catch (error) {
@@ -79,7 +75,12 @@ const deleteHoliday = (req, res) => {
 
 // Video0
 const postVideo = (req, res) => {
-    console.log('video complted');
+    try {
+        res.status(201).json({ status: true, message: 'successfully uploaded' })
+    } catch (error) {
+        res.status(400).json({ status: false, message: 'Uploading Cancelled' })
+
+    }
 }
 
 // Popular
@@ -96,7 +97,6 @@ const postPopularImage = (req, res) => {
 const postPopular = (req, res) => {
     try {
         let body = req.body
-        console.log(body);
         PopularModel.create(body).then((response) => {
             if (response) {
                 res.status(201).json({ status: true, data: response, message: 'New item added' })
@@ -111,7 +111,6 @@ const postPopular = (req, res) => {
 
 const getPopular = (req, res) => {
     try {
-        console.log('hihihihi');
         PopularModel.find().then((result) => {
             res.status(201).json({ status: true, data: result })
         })
@@ -122,10 +121,8 @@ const getPopular = (req, res) => {
 
 const deletePopular = (req, res) => {
     const id = req.params.id
-    console.log(id, 'id')
     try {
         PopularModel.findByIdAndDelete(id).then((respones) => {
-            console.log(respones, 'sdfsd')
             res.status(200).json({ status: true, message: "deleted" })
         })
     } catch (error) {

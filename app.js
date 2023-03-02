@@ -1,11 +1,12 @@
 const express = require('express')
-// const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const app = express()
 const dotenv = require('dotenv').config()
 const port = process.env.PORT || 5000;
 const connectDB = require('./config/db')
+
+
 
 
 const { errorHandler } = require('./middleware/error-middleware')
@@ -18,7 +19,10 @@ connectDB()
 
 app.use(cors())
 
-// app.use(cookieParser())
+app.use(express.static("public"));
+app.use("/images", express.static("images"));
+
+
 app.use(bodyParser.json());
 // Middlewares
 app.use(express.json())
