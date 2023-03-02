@@ -3,6 +3,7 @@ const HolidayModel = require('../models/holiday')
 const PopularModel = require('../models/popular')
 const UserModel = require('../models/user')
 const bcrypt = require('bcrypt');
+const otpHelper = require('../helper/otp-helper')
 
 // Auth
 
@@ -74,4 +75,62 @@ const getPopular = (req, res) => {
 }
 
 
-module.exports = { getHoliday, getPopular, doSignUp, doLogin, getUser }
+// Forgot
+
+const postForgot = (req, res) => {
+    try {
+        let email = req.body.email
+        UserModel.findOne({ email }).then((user) => {
+            if (user) {
+                otpHelper.dosms(user.mobile).then(() => {
+                    res.status(201).json({ status: true, email, mobile: user.mobile })
+                })
+            } else {
+                res.status(400).json({ satus: false, message: 'No account in this mail' })
+            }
+        })
+    } catch (error) {
+
+    }
+}
+
+const postOtp = (req, res) => {
+    try {
+        let { mobile, email, otp } = req.body
+        otpHelper.otpVerify(otp, mobile).then((response) => {
+            if (response) {
+                res.status(201).json({ status: true, email, message: 'Virification Success' })
+            } else {
+                res.status(400).json({ status: true, message: "Incurrect OTP" })
+            }
+        })
+    } catch (error) {
+
+    }
+}
+
+
+const postChangePassword = async (req, res) => {
+    try {
+        let password = req.body.password
+        let email = req.body.email
+        console.log(req.body)
+        password = await bcrypt.hash(password, 10)
+        console.log(password, 'pass')
+        await UserModel.updateOne({ email }, {
+            $set: {
+                password
+            }
+        }).then(() => {
+            console.log('rsepnserjsdf kjsdf lsdj')
+            res.status(201).json({ status: true, message: 'Password Changed' })
+        }).catch((error) => {
+            console.log(error, 'error')
+        })
+
+    } catch (error) {
+
+    }
+}
+
+module.exports = { getHoliday, getPopular, doSignUp, doLogin, getUser, postForgot, postOtp, postChangePassword }
